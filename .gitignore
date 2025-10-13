@@ -1,0 +1,17 @@
+# macOS cruft
+.DS_Store
+
+# Node / tooling (if you add bundlers later)
+node_modules/
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Build artifacts (adjust if you use /dist or /build)
+dist/
+build/
+*.zip
+
+# Env / secrets
+.env
+.env.*

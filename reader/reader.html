@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GTP-Reader</title>
+  <link rel="stylesheet" href="reader.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>GTP-Reader</h1>
+      <div id="meta"></div>
+    </header>
+
+    <section id="status" class="status">Waiting for summary…</section>
+
+    <!-- Summary only (no headline) -->
+    <main id="summary" class="summary-only" aria-live="polite"></main>
+  </div>
+  <script src="reader.js" type="module"></script>
+</body>
+</html>

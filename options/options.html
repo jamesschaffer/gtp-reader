@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GTP-Reader – Options</title>
+  <style>
+    body { font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu; margin: 2rem; }
+    label { display:block; margin:.5rem 0 .25rem; }
+    input, select { width: 420px; max-width: 100%; padding: .5rem; }
+    .row { margin-bottom: 1rem; }
+    .hint { color:#666; font-size:.9rem; }
+    button { padding:.5rem .75rem; }
+  </style>
+</head>
+<body>
+  <h1>GTP-Reader – Options</h1>
+  <div class="row">
+    <label for="openaiApiKey">OpenAI API Key</label>
+    <input id="openaiApiKey" type="password" placeholder="sk-..." autocomplete="off" />
+    <div class="hint">Stored locally in your browser via chrome.storage.local.</div>
+  </div>
+  <div class="row">
+    <label for="model">Model</label>
+    <select id="model">
+      <option value="gpt-4o-mini">gpt-4o-mini (fast)</option>
+      <option value="gpt-4o">gpt-4o (higher quality)</option>
+      <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+    </select>
+  </div>
+  <div class="row">
+    <button id="save">Save</button>
+    <span id="saved" style="margin-left:.5rem;color:green;display:none;">Saved ✓</span>
+  </div>
+  <script src="options.js" type="module"></script>
+</body>
+</html>
