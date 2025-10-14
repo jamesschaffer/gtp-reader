@@ -1,0 +1,7 @@
+name = "gtp-reader-ai-proxy"
+main = "src/worker.ts"
+compatibility_date = "2025-10-14"
+
+# Optional allowlist (fill with your extension ID later). Leave blank while testing.
+[vars]
+ALLOWED_EXT_IDS = ""
