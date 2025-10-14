@@ -1,21 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "GTP-Reader",
-  "version": "0.1.3",
-  "description": "Right-click to extract the main article text and show a reader page with a top summary.",
-  "action": { "default_title": "GTP-Reader" },
-  "icons": {
-    "16": "icons/16.png",
-    "32": "icons/32.png",
-    "48": "icons/48.png",
-    "128": "icons/128.png",
-    "256": "icons/256.png"
+  "name": "GTP Reader",
+  "version": "0.2.0",
+  "description": "Instant article summaries without any setup required.",
+  "action": {
+    "default_popup": "popup.html"
   },
   "background": {
-    "service_worker": "background/service_worker.js",
-    "type": "module"
+    "service_worker": "sw.js"
   },
-  "permissions": ["contextMenus", "scripting", "storage", "activeTab"],
-  "host_permissions": [],
-  "options_page": "options/options.html"
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://gtp-reader-ai-proxy.jamesschaffer.workers.dev/*"
+  ]
 }
