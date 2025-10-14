@@ -1,17 +1,28 @@
-# macOS cruft
-.DS_Store
-
-# Node / tooling (if you add bundlers later)
+# Node & build outputs
 node_modules/
-npm-debug.log*
-yarn.lock
-pnpm-lock.yaml
-
-# Build artifacts (adjust if you use /dist or /build)
 dist/
 build/
-*.zip
+*.log
 
-# Env / secrets
+# Local environment and secrets
 .env
 .env.*
+.wrangler/
+.wrangler.json
+wrangler.toml.local
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
+
+# Package manager locks (optional if using multiple managers)
+pnpm-lock.yaml
+yarn.lock
+
+# Temporary zips / bundles
+*.zip
+*.tar.gz
+
+# Test coverage
+coverage/
