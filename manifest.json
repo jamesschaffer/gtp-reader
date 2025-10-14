@@ -1,12 +1,17 @@
 {
   "manifest_version": 3,
   "name": "GTP Reader",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "Instant article summaries without any setup required.",
   "background": { "service_worker": "sw.js" },
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
   "host_permissions": [
     "https://gtp-reader-ai-proxy.jamesschaffer.workers.dev/*"
   ],
-  "action": {}
+  "web_accessible_resources": [
+    {
+      "resources": ["reader-overlay.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

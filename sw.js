@@ -48,98 +48,52 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
     func: async () => {
-      // ---------- Overlay ----------
-      const existing = document.getElementById("gtp-reader-overlay");
+      // ---------- Overlay (Shadow DOM) ----------
+      const existing = document.getElementById("gtp-reader-overlay-host");
       if (existing) existing.remove();
 
-      const overlay = document.createElement("div");
-      overlay.id = "gtp-reader-overlay";
-      Object.assign(overlay.style, {
+      // Host that positions the overlay; we isolate styles with a shadow root
+      const host = document.createElement("div");
+      host.id = "gtp-reader-overlay-host";
+      // prevent inheriting page styles
+      host.style.all = "initial";
+      Object.assign(host.style, {
         position: "fixed",
         top: "16px",
         right: "16px",
-        width: "480px",
-        maxHeight: "72vh",
-        overflow: "auto",
-        background: "#fff",
-        color: "#111",
-        border: "1px solid #e5e7eb",
-        borderRadius: "14px",
-        boxShadow: "0 10px 30px rgba(0,0,0,.15)",
-        padding: "16px",
-        font: "16px/1.65 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'",
         zIndex: 2147483647
       });
+      document.documentElement.appendChild(host);
 
-      const close = document.createElement("button");
-      close.textContent = "×";
-      Object.assign(close.style, {
-        position: "absolute",
-        top: "6px",
-        right: "8px",
-        border: "none",
-        background: "transparent",
-        fontSize: "28px",
-        cursor: "pointer",
-        lineHeight: "1",
-        padding: "12px"
-      });
-      close.onclick = () => overlay.remove();
+      const shadow = host.attachShadow({ mode: "open" });
+
+      // Base stylesheet inside shadow root (safe from page CSS)
+      const cssLink = document.createElement("link");
+      cssLink.rel = "stylesheet";
+      cssLink.href = chrome.runtime.getURL("reader-overlay.css");
+      shadow.appendChild(cssLink);
+
+      // Build panel DOM within shadow
+      const panel = document.createElement("div");
+      panel.className = "panel";
 
       const header = document.createElement("div");
-      Object.assign(header.style, {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginBottom: "8px"
-      });
+      header.className = "header";
 
       const title = document.createElement("h1");
+      title.className = "title";
       title.textContent = "GTP Reader";
-      Object.assign(title.style, {
-        fontSize: "1.25rem",
-        margin: "0 0 .25rem",
-        fontWeight: "700"
-      });
 
-      const headlineEl = document.createElement("div");
-      Object.assign(headlineEl.style, {
-        fontSize: "1rem",
-        fontWeight: "600",
-        lineHeight: "1.5",      // tighter line-height
-        marginBottom: "1.2rem"  // more breathing room under headline
-      });
+      const close = document.createElement("button");
+      close.className = "close";
+      close.textContent = "×";
+      close.onclick = () => host.remove();
 
-      const toneEl = document.createElement("span");
-      Object.assign(toneEl.style, {
-        display: "none",        // hidden until we have tone
-        fontSize: "0.9rem",
-        background: "#f1f5f9",
-        border: "1px solid #e2e8f0",
-        color: "#334155",
-        padding: "4px 12px",
-        borderRadius: "999px",
-        marginBottom: "10px"
-      });
+      header.appendChild(title);
+      header.appendChild(close);
 
-      const listEl = document.createElement("ul");
-      Object.assign(listEl.style, {
-        margin: ".5rem 0 0 1.25rem",
-        padding: "0"
-      });
-
-      // Pre-loader chip (animated dots)
       const statusEl = document.createElement("div");
-      Object.assign(statusEl.style, {
-        color: "#374151",
-        fontSize: "0.9rem",
-        padding: ".5rem .75rem",
-        background: "#f3f4f6",
-        border: "1px solid #e5e7eb",
-        borderRadius: "8px",
-        margin: "0",
-        display: "inline-block"
-      });
+      statusEl.className = "status";
       let dots = 0;
       const tick = () => {
         const seq = ".".repeat((dots++ % 3) + 1);
@@ -148,24 +102,26 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
       tick();
       const statusTimer = setInterval(tick, 400);
 
-      header.appendChild(title);
-      overlay.appendChild(header);
-      overlay.appendChild(close);
-      overlay.appendChild(statusEl);  // visible while streaming
-      overlay.appendChild(headlineEl);
-      overlay.appendChild(toneEl);
-      overlay.appendChild(listEl);
-      document.documentElement.appendChild(overlay);
+      const headlineEl = document.createElement("div");
+      headlineEl.className = "headline";
+
+      const toneEl = document.createElement("span");
+      toneEl.className = "tone";
+
+      const listEl = document.createElement("ul");
+
+      panel.appendChild(header);
+      panel.appendChild(statusEl);     // visible while streaming
+      panel.appendChild(headlineEl);
+      panel.appendChild(toneEl);
+      panel.appendChild(listEl);
+      shadow.appendChild(panel);
 
       // Helper for error messages (reuses the chip styling)
       function showError(message) {
         clearInterval(statusTimer);
         statusEl.textContent = message;
-        Object.assign(statusEl.style, {
-          background: "#fef2f2",
-          borderColor: "#fecaca",
-          color: "#991b1b"
-        });
+        statusEl.classList.add("error");
       }
 
       // ---------- Gather page text ----------
@@ -283,13 +239,11 @@ Rules:
         const bullets = Array.isArray(data?.bullets) ? data.bullets : [];
         for (const b of bullets) {
           const li = document.createElement("li");
-          li.style.margin = ".25rem 0";
           li.textContent = b;
           listEl.appendChild(li);
         }
         if (!bullets.length) {
           const li = document.createElement("li");
-          li.style.margin = ".25rem 0";
           li.textContent = "No bullet points returned.";
           listEl.appendChild(li);
         }

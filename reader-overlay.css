@@ -1,0 +1,86 @@
+:host, * { box-sizing: border-box; }
+
+.panel {
+  width: 480px;
+  max-height: 72vh;
+  overflow: auto;
+  background: #fff;
+  color: #111;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  padding: 16px;
+  font: 16px/1.65 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 8px 0;
+}
+
+.title {
+  font-size: 1.25rem;
+  margin: 0 0 .25rem 0;
+  font-weight: 700;
+}
+
+.close {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 8px;
+  margin: -4px -8px 0 8px;
+}
+
+.status {
+  color: #374151;
+  font-size: 0.9rem;
+  padding: .5rem .75rem;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin: 0;
+  display: inline-block;
+}
+
+.status.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.headline {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 1.2rem 0 0;
+}
+
+.tone {
+  display: none;
+  font-size: 0.9rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin: 10px 0 0 0;
+}
+
+.tone strong {
+  font-weight: 700;
+}
+
+ul {
+  margin: .5rem 0 0 1.25rem;
+  padding: 0;
+  list-style: disc !important;
+}
+
+li {
+  margin: .25rem 0;
+}
