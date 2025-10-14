@@ -3,18 +3,10 @@
   "name": "GTP Reader",
   "version": "0.2.0",
   "description": "Instant article summaries without any setup required.",
-  "action": {
-    "default_popup": "popup.html"
-  },
-  "background": {
-    "service_worker": "sw.js"
-  },
-  "permissions": [
-    "storage",
-    "activeTab",
-    "scripting"
-  ],
+  "background": { "service_worker": "sw.js" },
+  "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": [
     "https://gtp-reader-ai-proxy.jamesschaffer.workers.dev/*"
-  ]
+  ],
+  "action": {}
 }
