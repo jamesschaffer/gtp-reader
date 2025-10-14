@@ -15,9 +15,10 @@
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: center;          /* keeps the X vertically aligned with title */
   justify-content: space-between;
   margin: 0 0 8px 0;
+  border-bottom: 1px solid #cccccc;
 }
 
 .title {
@@ -33,17 +34,18 @@
   line-height: 1;
   cursor: pointer;
   padding: 8px;
-  margin: -4px -8px 0 8px;
+  margin: -10px -8px 0 8px;      /* nudges into the corner */
 }
 
 .status {
+  width: 100%;
   color: #374151;
   font-size: 0.9rem;
   padding: .5rem .75rem;
   background: #f3f4f6;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  margin: 0;
+  margin: 1rem 0 0 0;
   display: inline-block;
 }
 
@@ -56,8 +58,8 @@
 .headline {
   font-size: 1rem;
   font-weight: 600;
-  line-height: 1.5;
-  margin: 1.2rem 0 0;
+  line-height: 1.5;             /* your tweak */
+  margin: 1.2rem 0 .5rem 0;           /* your tweak */
 }
 
 .tone {
@@ -76,9 +78,9 @@
 }
 
 ul {
-  margin: .5rem 0 0 1.25rem;
+  margin: 1rem 0 0 1.25rem;
   padding: 0;
-  list-style: disc !important;
+  list-style: disc !important;              /* bullets always visible */
 }
 
 li {
