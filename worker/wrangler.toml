@@ -2,6 +2,15 @@ name = "gtp-reader-ai-proxy"
 main = "src/worker.ts"
 compatibility_date = "2025-10-14"
 
-# Optional allowlist (fill with your extension ID later). Leave blank while testing.
+# KV namespace for rate limiting
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "preview_id"
+preview_id = "preview_id"
+
 [vars]
-ALLOWED_EXT_IDS = "mlenijemlfelmlmiaemkfifiajddhdmg"
+# Optional: Set daily request limit per install (default: 20)
+DAILY_REQUEST_LIMIT = "20"
+
+# Optional: Extension ID allowlist (leave empty to allow all extensions)
+# ALLOWED_EXT_IDS = ""

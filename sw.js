@@ -137,13 +137,23 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
       // ---------- Request JSON summary ----------
       const PROXY_URL = "https://gtp-reader-ai-proxy.jamesschaffer.workers.dev";
+
+      // Get unique install token for rate limiting
+      let installToken = "unknown";
+      try {
+        const { installToken: token } = await chrome.storage.local.get("installToken");
+        installToken = token || installToken;
+      } catch (e) {
+        console.warn("Could not retrieve install token:", e);
+      }
+
       const sys = `
 You are a summarizer for busy professionals. Return STRICT JSON only (no markdown, no extra keys) with:
-- "headline": string — one sentence in sentence case that captures the article’s essence/thesis. If opinionated or lopsided, make that explicit (e.g., "Opinion: …", "The author argues that …"). If the argument appears weak or implausible, briefly signal that without snark.
+- "headline": string — one sentence in sentence case that captures the article's essence/thesis. If opinionated or lopsided, make that explicit (e.g., "Opinion: …", "The author argues that …"). If the argument appears weak or implausible, briefly signal that without snark.
 - "bullets": array — up to 7 concise, well-written bullets. Each bullet must be a complete sentence focusing on facts, key claims, evidence, or implications. No fluff. No invented details. Attribute uncertainty or speculation (e.g., "The author suggests…", "Cites unverified claims…").
 - "tone": string — 1–2 words characterizing the stance (e.g., balanced, critical, optimistic, alarmed, skeptical, concerned).
 Rules:
-- Do not add facts that aren’t present.
+- Do not add facts that aren't present.
 - Be clear and specific; avoid generic phrasing.
 - The JSON must parse cleanly in one object. No surrounding text.
       `.trim();
@@ -155,7 +165,7 @@ Rules:
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-Install-Token": "context-menu",
+            "X-Install-Token": installToken,
             "X-Ext-Id": chrome.runtime?.id || ""
           },
           body: JSON.stringify({

@@ -1,6 +1,8 @@
 export interface Env {
   OPENAI_API_KEY: string;
   ALLOWED_EXT_IDS?: string;
+  RATE_LIMIT_KV?: KVNamespace;
+  DAILY_REQUEST_LIMIT?: string;
 }
 
 const CORS = {
@@ -8,6 +10,8 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type,X-Install-Token,X-Ext-Id",
   "Access-Control-Allow-Methods": "POST,OPTIONS",
 };
+
+const DEFAULT_DAILY_LIMIT = 20;
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
@@ -18,7 +22,34 @@ export default {
     const installToken = req.headers.get("X-Install-Token") || "";
     if (!installToken) return new Response("Missing install token", { status: 401, headers: CORS });
 
-    // Allowlist (optional during local testing)
+    // Rate limiting per install token
+    if (env.RATE_LIMIT_KV) {
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const rateLimitKey = `rate:${installToken}:${today}`;
+      const dailyLimit = parseInt(env.DAILY_REQUEST_LIMIT || String(DEFAULT_DAILY_LIMIT));
+
+      const currentCount = await env.RATE_LIMIT_KV.get(rateLimitKey);
+      const count = currentCount ? parseInt(currentCount) : 0;
+
+      if (count >= dailyLimit) {
+        return new Response(
+          JSON.stringify({
+            error: "Daily request limit exceeded. Try again tomorrow.",
+            limit: dailyLimit,
+            resetDate: today
+          }),
+          {
+            status: 429,
+            headers: { ...CORS, "Content-Type": "application/json" }
+          }
+        );
+      }
+
+      // Increment counter - expire after 48 hours to clean up old keys
+      await env.RATE_LIMIT_KV.put(rateLimitKey, String(count + 1), { expirationTtl: 172800 });
+    }
+
+    // Optional allowlist (only enforced if configured)
     const allow = (env.ALLOWED_EXT_IDS || "").split(",").map(s => s.trim()).filter(Boolean);
     if (allow.length && !allow.includes(extId)) {
       return new Response("Extension not allowed", { status: 403, headers: CORS });
