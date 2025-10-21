@@ -5,8 +5,8 @@ compatibility_date = "2025-10-14"
 # KV namespace for rate limiting
 [[kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = "preview_id"
-preview_id = "preview_id"
+id = "151a32f38fce4956b2187476b8a874f2"
+preview_id = "30240286e66344d0a9e90e4b7347fbbe"
 
 [vars]
 # Optional: Set daily request limit per install (default: 20)
