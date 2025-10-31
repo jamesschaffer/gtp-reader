@@ -37,7 +37,7 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
       id: "gtp-reader-summarize",
       title: "Summarize this page (GTP Reader)",
-      contexts: ["page"]
+      contexts: ["all"]
     });
   } catch {}
 });
