@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "GTP Reader",
   "short_name": "GTP Reader",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "Instant article summaries without any setup required.",
   "minimum_chrome_version": "114",
   "background": { "service_worker": "sw.js" },
